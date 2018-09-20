@@ -9,9 +9,10 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
+import tensorflow
 import tensorflow as tf
 from tensorflow import keras
-from keras.backend.tensorflow_backend import set_session
+from tf.keras.backend import set_session
 from sklearn.metrics import roc_auc_score
 
 from NNFlow.data_frame.data_frame                             import DataFrame              as NNFlowDataFrame
@@ -151,7 +152,7 @@ class NeuralNetworkTrainer(object):
         # Create 2D plot for the predicted parameter
 
         # Save cpkt file for this NN
-        sess = keras.backend.get_session()
+        sess = tf.keras.backend.get_session()
         saver = tf.train.Saver()
         save_path = saver.save(sess, directory_model_properties )
 

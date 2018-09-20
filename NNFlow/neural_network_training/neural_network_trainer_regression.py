@@ -11,7 +11,7 @@ import numpy as np
 
 import tensorflow as tf
 from tensorflow import keras
-from keras.backend.tensorflow_backend import set_session
+from tensorflow.keras.backend import set_session
 
 from NNFlow.data_frame.data_frame                             import DataFrame              as NNFlowDataFrame
 

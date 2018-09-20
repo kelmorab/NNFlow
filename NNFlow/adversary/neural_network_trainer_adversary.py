@@ -12,10 +12,10 @@ import numpy as np
 
 import tensorflow as tf
 from tensorflow import keras
-from keras.backend.tensorflow_backend import set_session
+#from keras.backend import set_session
 from sklearn.metrics import roc_auc_score
 
-from NNFlow.data_frame.data_frame import DataFrame              as NNFlowDataFrame
+from NNFlow.data_frame.data_frame import DataFrame as NNFlowDataFrame
 
 
 class NeuralNetworkTrainer(object):
@@ -24,7 +24,7 @@ class NeuralNetworkTrainer(object):
         # Limit gpu usage
         config = tf.ConfigProto()
         config.gpu_options.allow_growth = True
-        set_session(tf.Session(config=config))
+        tf.keras.backend.set_session(tf.Session(config=config))
 
     def train(self,
               save_path,
@@ -253,7 +253,7 @@ class NeuralNetworkTrainer(object):
         # Create 2D plot for the predicted parameter
 
         # Save cpkt file for this NN
-        sess = keras.backend.get_session()
+        sess = tf.keras.backend.get_session()
         saver = tf.train.Saver()
         save_path = saver.save(sess, directory_model_properties)
 
@@ -395,7 +395,7 @@ class NeuralNetworkTrainer(object):
         np.savez(path + "/history_data_file.np", data_dict)
 
 
-from keras.callbacks import Callback
+from tensorflow.keras.callbacks import Callback
 
 
 class TimeHistory(keras.callbacks.Callback):
@@ -436,10 +436,11 @@ import NNFlow
 # ----------------------------------------------------------------------------------------------------
 
 
-workdir_base = '/storage/9/jschindler/'
+workdir_base = '/local/scratch/karimel/workdir/'
+dataset_base = '/storage/c/karimel/'
 name_subdir = 'NN_v1'
 
-number_of_hidden_layers = 3
+number_of_hidden_layers = 2
 number_of_neurons_per_layer = 200
 hidden_layers = [number_of_neurons_per_layer for i in range(number_of_hidden_layers)]
 
@@ -466,13 +467,16 @@ model_id = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
 save_path = os.path.join(workdir_base, name_subdir, 'tth/model_' + model_id)
 model_name = name_subdir + '_' + model_id
 
-path_to_training_data_set = os.path.join(workdir_base, 'data_sets_2/training_data_set.hdf')
-path_to_validation_data_set = os.path.join(workdir_base, 'data_sets_2/validation_data_set.hdf')
-path_to_test_data_set = os.path.join(workdir_base, 'data_sets_2/test_data_set.hdf')
+path_to_training_data_set = os.path.join(dataset_base, 'data_sets_adv_ttH_ttbb/training_data_set.hdf')
+path_to_validation_data_set = os.path.join(dataset_base, 'data_sets_adv_ttH_ttbb/validation_data_set.hdf')
+path_to_test_data_set = os.path.join(dataset_base, 'data_sets_adv_ttH_ttbb/test_data_set.hdf')
 # ----------------------------------------------------------------------------------------------------
+print(os.path.isdir(save_path))
+print(os.path.dirname(save_path))
+print(save_path)
 if not os.path.isdir(save_path):
-    if os.path.isdir(os.path.dirname(save_path)):
-        os.mkdir(save_path)
+    #if os.path.isdir(os.path.dirname(save_path)):
+        os.makedirs(save_path)
 # ----------------------------------------------------------------------------------------------------
 train_dict = {'save_path': save_path,
               'model_id': model_id,
